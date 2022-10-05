@@ -6,10 +6,10 @@
             "request": "launch",
             "type": "al",
             "environmentType": "OnPrem",
-            "server": "http://localhost:8080/BC200Test",
-            "serverInstance": "Test",
+            "server": "http://localhost:8080/Dev",
+            "serverInstance": "Development",
             "authentication": "Windows",
-            "startupObjectId": 21,
+            "startupObjectId": 60102,
             "startupObjectType": "Page",
             "breakOnError": true,
             "launchBrowser": true,
@@ -18,7 +18,5 @@
             "tenant": "default",
             "schemaUpdateMode": "Synchronize"
         }
-    ]
-
-    
+    ]   
 }
