@@ -8,7 +8,7 @@ codeunit 60100 GetResponseFromAPI
     var
         myInt: Integer;
 
-    procedure ReadResultfromResponse(response: Text)
+    procedure GetResultfromResponseStudentData(response: Text)
 
     var
         json_array: JsonArray;
@@ -103,8 +103,6 @@ codeunit 60100 GetResponseFromAPI
 
                             end;
                         end;
-
-                        recStudent.Active := true;
                         recStudent.Insert();
                         studID += 1;
                     end;
@@ -122,4 +120,46 @@ codeunit 60100 GetResponseFromAPI
         jValue := json_Token.AsValue();
         exit(true);
     end;
+
+
+
+
+    procedure GetResultfromResponseConsumerData(response: Text)
+
+    var
+        json_array: JsonArray;
+        json_object: JsonObject;
+        json_value: JsonValue;
+        i: Integer;
+        recConsumer: Record APIConsumer;
+        consumerID: Integer;
+        json_token: JsonToken;
+        valuejToken: JsonToken;
+    begin
+
+        recConsumer.Reset();
+
+        if (recConsumer.FindLast()) then
+            consumerID := recConsumer.ID + 1
+        else
+            consumerID := 1;
+
+
+        if json_token.ReadFrom(response) then begin
+
+            if (json_token.IsArray()) then begin
+                json_array := json_token.AsArray();
+
+                for i := 0 to json_array.Count() - 1 do begin
+                    json_array.Get(i, json_token);
+
+
+
+                end;
+
+
+            end;
+        end;
+    end;
+
 }

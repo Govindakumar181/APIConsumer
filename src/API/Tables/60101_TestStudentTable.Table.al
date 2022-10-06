@@ -46,12 +46,7 @@ table 60101 Students
         {
             DataClassification = ToBeClassified;
         }
-
-        field(9; Active; Boolean)
-        {
-            DataClassification = ToBeClassified;
-        }
-        field(10; WebID; Integer)
+        field(9; WebID; Integer)
         {
             DataClassification = ToBeClassified;
         }
