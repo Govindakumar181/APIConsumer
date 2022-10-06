@@ -9,7 +9,7 @@
             "server": "http://localhost:8080/Dev",
             "serverInstance": "Development",
             "authentication": "Windows",
-            "startupObjectId": 60102,
+            "startupObjectId": 60100,
             "startupObjectType": "Page",
             "breakOnError": true,
             "launchBrowser": true,

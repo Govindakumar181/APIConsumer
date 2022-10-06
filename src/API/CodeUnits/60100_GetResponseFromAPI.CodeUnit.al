@@ -151,13 +151,47 @@ codeunit 60100 GetResponseFromAPI
                 json_array := json_token.AsArray();
 
                 for i := 0 to json_array.Count() - 1 do begin
+
                     json_array.Get(i, json_token);
 
+                    if (json_token.IsObject()) then begin
+                        json_object := json_token.AsObject();
 
+                        recConsumer.Reset();
+                        recConsumer.Init();
+                        recConsumer.ID := consumerID;
 
+                        if (json_object.Get('id', valuejToken)) then begin
+                            if (valuejToken.IsValue()) then begin
+                                // Message(valuejToken.AsValue().AsText());
+                                recConsumer.WebID := valuejToken.AsValue().AsInteger();
+                            end;
+                        end;
+
+                        if GetResultJsonValue(json_object, 'name', json_value) then begin
+                            //Message(json_value.AsText());
+                            recConsumer.Name := json_value.AsText();
+                        end;
+                        if GetResultJsonValue(json_object, 'username', json_value) then begin
+                            recConsumer.Address := json_value.AsText();
+                        end;
+
+                        if (json_object.Get('address', json_token)) then begin
+                            if (json_token.IsObject()) then begin
+                                json_object := json_token.AsObject();
+
+                                if GetResultJsonValue(json_object, 'city', json_value) then begin
+                                    recConsumer.Address := json_value.AsText();
+                                end;
+
+                            end;
+                        end;
+
+                        recConsumer.Insert();
+                        consumerID += 1;
+
+                    end;
                 end;
-
-
             end;
         end;
     end;

@@ -19,6 +19,10 @@ table 60100 APIConsumer
         {
             DataClassification = ToBeClassified;
         }
+        field(4; WebID; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys
