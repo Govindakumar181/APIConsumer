@@ -44,6 +44,15 @@ pageextension 60101 BusinessManageExtension extends "Business Manager Role Cente
                     PromotedCategory = Process;
                     RunObject = Page ConsumerAPIPage;
                 }
+
+                action(ActionCreatePO)
+                {
+                    ApplicationArea = Suite;
+                    Caption = 'Create PO From API';
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    RunObject = Page PurchaseOrderDialog;
+                }
             }
         }
     }
