@@ -53,10 +53,12 @@ page 60107 PurchaseOrderDialog
 
     begin
         if CloseAction = Action::OK then begin
-            if (http_Cleint.Get('https://jsonplaceholder.typicode.com/posts', http_ResponseMsg)) then begin
+            if (http_Cleint.Get('https://jsonplaceholder.typicode.com/photos', http_ResponseMsg)) then begin
                 http_ResponseMsg.Content.ReadAs(response);
                 //Message(response);
-                createPurchaseOrder.CreatePurchaseOrderFromAPI(response, SupplierNo, Item, NoOfPO);
+                // createPurchaseOrder.CreatePurchaseOrderFromAPI(response, SupplierNo, Item, NoOfPO);
+                createPurchaseOrder.CreatePurchaseOrderFromAPI2(response, SupplierNo, Item, NoOfPO);
+
             end;
         end
         else

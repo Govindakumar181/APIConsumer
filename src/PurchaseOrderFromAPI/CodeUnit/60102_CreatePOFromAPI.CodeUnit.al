@@ -13,13 +13,22 @@ codeunit 60102 CreatePurchaseOrderFromAPI
 
     local procedure CreatePurchaseOrder(var SupplierNo: Code[20]; ItemNo: Code[20]; ItemQuantity: Decimal; CostAmount: Decimal) ReturnValue: Code[20]
     var
+        POSetup: Record "Purchases & Payables Setup";
+        NoMgt: Codeunit NoSeriesManagement;
+        Post: Codeunit "Purch.-Post";
+
 
     begin
+        POSetup.Get();
+
 
         POOrder.Reset();//header code ends here
         POOrder.Init();
 
         POOrder.Validate("Document Type", "Purchase Document Type"::Order);
+
+        POOrder."No." := NoMgt.GetNextNo(POSetup."Order Nos.", WorkDate, true);
+
         POOrder.Validate("Buy-from Vendor No.", SupplierNo);
 
 
@@ -27,9 +36,12 @@ codeunit 60102 CreatePurchaseOrderFromAPI
 
         uerPurchaseLines(ItemNo, ItemQuantity, CostAmount, POOrder."No.");
 
+        // POOrder.Receive := true;
+        // Post.Run(POOrder);
+
         ReturnValue := POOrder."No.";
 
-        Message(ReturnValue);
+        // Message(ReturnValue);
 
     end;
 
@@ -71,6 +83,7 @@ codeunit 60102 CreatePurchaseOrderFromAPI
     begin
         POOrder.Reset();
         POLines.Reset();
+        POSetup.Get();
 
         if json_token.ReadFrom(response) then begin
 
@@ -84,11 +97,8 @@ codeunit 60102 CreatePurchaseOrderFromAPI
                     if (json_token.IsObject()) then begin
                         json_object := json_token.AsObject();
 
-
-
                         if (json_object.Get('userId', valuejToken)) then begin
                             if (valuejToken.IsValue()) then begin
-                                // Message(valuejToken.AsValue().AsText());
                                 ItemQuantities := valuejToken.AsValue().AsInteger();
                                 // CreatePurchaseOrder(SupplierNo, ItemNo, ItemQuantities, 54)
                             end;
@@ -96,33 +106,91 @@ codeunit 60102 CreatePurchaseOrderFromAPI
 
                         if (json_object.Get('id', valuejToken)) then begin
                             if (valuejToken.IsValue()) then begin
-                                // Message(valuejToken.AsValue().AsText());
                                 ItemCost := valuejToken.AsValue().AsDecimal();
                             end;
                         end;
 
                         POOrder.Reset();
                         POOrder.Init();
-                        POOrder."No." := PONumber;
+                        POOrder."No." := NoMgt.GetNextNo(POSetup."Order Nos.", WorkDate, true);
+                        // POOrder."No." := PONumber;
                         POOrder.Validate("Document Type", "Purchase Document Type"::Order);
                         POOrder.Validate("Buy-from Vendor No.", SupplierNo);
                         POOrder.Insert(true);
 
                         uerPurchaseLines(ItemNo, ItemQuantities, ItemCost, POOrder."No.");
 
-
-
                         // if (POOrder."No." = POOrder."No.") then begin
-                        POSetup.Get();
-                        PONumber := NoMgt.GetNextNo(POSetup."Order Nos.", WorkDate, true)
-                        // end;
 
+                        // end;
+                        // POSetup.Get();
+                        // POOrder."No." := NoMgt.GetNextNo(POSetup."Order Nos.", WorkDate, true)
                     end;
+
                 end;
             end;
         end;
     end;
 
+
+    procedure CreatePurchaseOrderFromAPI2(response: Text; SupplierNo: Code[20]; ItemNo: Code[20]; NoOfPO: integer)
+
+    var
+        json_array: JsonArray;
+        json_object: JsonObject;
+        json_value: JsonValue;
+        i: Integer;
+        json_token: JsonToken;
+        valuejToken: JsonToken;
+        ItemQuantities: Integer;
+        ItemCost: Decimal;
+    // NoMgt: Codeunit NoSeriesManagement;
+    // POSetup: Record "Purchases & Payables Setup";
+    begin
+
+        // POSetup.Get();
+
+        if json_token.ReadFrom(response) then begin
+
+            if (json_token.IsArray()) then begin
+                json_array := json_token.AsArray();
+
+                for i := 0 to NoOfPO - 1 do begin
+
+                    json_array.Get(i, json_token);
+
+                    if (json_token.IsObject()) then begin
+                        json_object := json_token.AsObject();
+
+                        if (json_object.Get('albumId', valuejToken)) then begin
+                            if (valuejToken.IsValue()) then begin
+                                ItemQuantities := valuejToken.AsValue().AsInteger();
+                            end;
+                        end;
+
+                        if (json_object.Get('id', valuejToken)) then begin
+                            if (valuejToken.IsValue()) then begin
+                                ItemCost := valuejToken.AsValue().AsDecimal();
+                            end;
+                        end;
+
+                        CreatePurchaseOrder(SupplierNo, ItemNo, ItemQuantities, ItemCost)
+
+
+                        // POOrder.Reset();
+                        // POOrder.Init();
+                        // POOrder."No." := NoMgt.GetNextNo(POSetup."Order Nos.", WorkDate, true);
+                        // POOrder.Validate("Document Type", "Purchase Document Type"::Order);
+                        // POOrder.Validate("Buy-from Vendor No.", SupplierNo);
+                        // POOrder.Insert(true);
+
+                        // uerPurchaseLines(ItemNo, ItemQuantities, ItemCost, POOrder."No.");
+                    end;
+
+                end;
+            end;
+        end;
+    end;
 
 }
 

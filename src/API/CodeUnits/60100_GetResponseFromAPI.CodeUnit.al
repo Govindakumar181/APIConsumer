@@ -196,4 +196,65 @@ codeunit 60100 GetResponseFromAPI
         end;
     end;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    procedure GetAPIToken(response: Text)
+
+    var
+        json_array: JsonArray;
+        json_object: JsonObject;
+        json_value: JsonValue;
+        i: Integer;
+        recConsumer: Record TESTAPITABLE;
+        consumerID: Integer;
+        json_token: JsonToken;
+        valuejToken: JsonToken;
+    begin
+
+        recConsumer.Reset();
+
+        if (recConsumer.FindLast()) then
+            consumerID := recConsumer.ID + 1
+        else
+            consumerID := 1;
+
+
+        if json_token.ReadFrom(response) then begin
+            if (json_token.IsObject()) then begin
+
+                json_object := json_token.AsObject();
+
+                recConsumer.Reset();
+                recConsumer.Init();
+                recConsumer.ID := consumerID;
+
+                if GetResultJsonValue(json_object, 'access_token', json_value) then begin
+                    recConsumer.AccessToken := json_value.AsText();
+                end;
+
+                if GetResultJsonValue(json_object, 'expires_in', json_value) then begin
+                    recConsumer.ExpiresIn := json_value.AsText();
+                end;
+
+                recConsumer.Insert();
+                consumerID += 1;
+
+            end;
+        end;
+    end;
+
 }

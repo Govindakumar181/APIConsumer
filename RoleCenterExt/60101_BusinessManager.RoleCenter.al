@@ -16,32 +16,28 @@ pageextension 60101 BusinessManageExtension extends "Business Manager Role Cente
                 {
                     ApplicationArea = Suite;
                     Caption = 'Test Page';
-                    Promoted = true;
-                    PromotedCategory = Process;
+
                     RunObject = Page "Student Page";
                 }
                 action(ActionTestAPIPage)
                 {
                     ApplicationArea = Suite;
                     Caption = 'Test API Page';
-                    Promoted = true;
-                    PromotedCategory = Process;
+
                     RunObject = Page StudentAPIPage;
                 }
                 action(ActionAPIConsumer)
                 {
                     ApplicationArea = Suite;
                     Caption = 'Consumer';
-                    Promoted = true;
-                    PromotedCategory = Process;
+
                     RunObject = Page ConsumerPage;
                 }
                 action(ActionAPIPage)
                 {
                     ApplicationArea = Suite;
                     Caption = 'Consumer API Page';
-                    Promoted = true;
-                    PromotedCategory = Process;
+
                     RunObject = Page ConsumerAPIPage;
                 }
 
@@ -49,10 +45,45 @@ pageextension 60101 BusinessManageExtension extends "Business Manager Role Cente
                 {
                     ApplicationArea = Suite;
                     Caption = 'Create PO From API';
-                    Promoted = true;
-                    PromotedCategory = Process;
+
                     RunObject = Page PurchaseOrderDialog;
                 }
+
+                action(ActionQuerySales)
+                {
+                    ApplicationArea = Suite;
+                    Caption = 'Sales Order Query';
+
+                    // RunObject = query ZYSalesOrderQuery;
+                }
+
+                action(ActionPageSales)
+                {
+                    ApplicationArea = Suite;
+                    Caption = 'Sales Order Page';
+
+                    RunObject = page ZYSalesOrderQueryPage;
+                }
+
+
+                action(ActionPageSales1)
+                {
+                    ApplicationArea = Suite;
+                    Caption = 'TEST API Page';
+
+                    RunObject = page TESTAPI;
+                }
+
+
+                action(ActionPageExcelImport)
+                {
+                    ApplicationArea = Suite;
+                    Caption = 'Excel Import';
+
+                    RunObject = page "SO Import Worksheet";
+                }
+
+
             }
         }
     }
